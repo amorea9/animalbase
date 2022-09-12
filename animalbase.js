@@ -10,6 +10,7 @@ const settings = {
 };
 // The prototype for all animals:
 const Animal = {
+  star: false,
   name: "",
   desc: "-unknown animal-",
   type: "",
@@ -40,7 +41,7 @@ function prepareObjects(jsonData) {
   allAnimals = jsonData.map(preapareObject);
 
   // TODO: This might not be the function we want to call first
-  displayList(allAnimals);
+  buildList();
 }
 
 function preapareObject(jsonObject) {
@@ -94,6 +95,7 @@ function setSort(sortBy, sortDir) {
 function buildList() {
   //call to filertList
   const currentList = filterList(allAnimals);
+  //currentList = applyStar(currentList); //??
   //call to sortList
   const sortedList = sortList(currentList);
 
@@ -138,7 +140,7 @@ function sortList(sortedList) {
   }
   return sortedList;
 }
-
+function applyStar(animal) {}
 // function filterAndSort(filteredList, sortDir, sortBy) {
 //   const filteredAndSortedList = sortList(filteredList, sortDir, sortBy);
 //   displayList(filteredAndSortedList);
@@ -153,14 +155,33 @@ function displayList(animals) {
 }
 
 function displayAnimal(animal) {
+  //First: make sure you can display stars in the HTML (if you use your own code), then modify the displayAnimal function to display the right kind of star.
   // create clone
   const clone = document.querySelector("template#animal").content.cloneNode(true);
 
   // set clone data
+
   clone.querySelector("[data-field=name]").textContent = animal.name;
   clone.querySelector("[data-field=desc]").textContent = animal.desc;
   clone.querySelector("[data-field=type]").textContent = animal.type;
   clone.querySelector("[data-field=age]").textContent = animal.age;
+
+  if (animal.star === true) {
+    clone.querySelector("[data-field=star]").textContent = "⭐";
+  } else {
+    clone.querySelector("[data-field=star]").textContent = "☆";
+  }
+
+  clone.querySelector("[data-field=star]").addEventListener("click", clickStar);
+
+  function clickStar() {
+    if (animal.star === true) {
+      animal.star = false;
+    } else {
+      animal.star = true;
+    }
+    buildList();
+  }
 
   // append clone to list
   document.querySelector("#list tbody").appendChild(clone);
