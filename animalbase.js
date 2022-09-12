@@ -14,14 +14,14 @@ const Animal = {
 
 function start() {
   console.log("ready");
-
-  // TODO: Add event-listeners to filter and sort buttons
+  //event listener added with a function
   registerButtons();
   loadJSON();
 }
 
 function registerButtons() {
   document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
+  document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSorting));
 }
 
 async function loadJSON() {
@@ -55,6 +55,10 @@ function selectFilter(event) {
   const filter = event.target.dataset.filter;
   filterList(filter);
 }
+function selectSorting(event) {
+  const sort = event.target.dataset.sort;
+  sortList(sort);
+}
 
 function filterList(filterBy) {
   let filteredList = allAnimals;
@@ -74,6 +78,51 @@ function isDog(animal) {
   return animal.type == "dog";
 }
 
+function sortList(sortBy) {
+  let sortedList = allAnimals;
+
+  if (sortBy === "name") {
+    sortedList = sortedList.sort(sortByName);
+  } else if (sortBy === "type") {
+    sortedList = sortedList.sort(sortByType);
+  }
+  displayList(sortedList);
+}
+
+function sortByName(animalA, animalB) {
+  if (animalA.name < animalB.name) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+function sortByType(animalA, animalB) {
+  if (animalA.type < animalB.type) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+// function sortBy(listToSort, direction = "asc", property) {
+//   let sortDirection;
+//   //gives priority to the property here rather than direction
+
+//   if (direction === "asc") {
+//     sortDirection = 1;
+//   } else {
+//     sortDirection = -1;
+//   }
+//   listToSort = listToSort.sort(compareName);
+//   function compareName(a, b) {
+//     if (a[property] < b[property]) {
+//       return -1 * sortDirection;
+//     } else {
+//       return 1 * sortDirection;
+//     }
+//   }
+//   return listToSort;
+// }
 function displayList(animals) {
   // clear the list
   document.querySelector("#list tbody").innerHTML = "";
