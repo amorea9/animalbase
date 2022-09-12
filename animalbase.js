@@ -1,13 +1,8 @@
 "use strict";
 
+window.addEventListener("DOMContentLoaded", start);
+
 let allAnimals = [];
-const filterButton = document.querySelectorAll(".filter");
-const catButton = filterButton[0];
-const dogButton = filterButton[1];
-const allButton = filterButton[2];
-let filterOfCats;
-let filterOfDogs;
-let filterOfAll;
 
 // The prototype for all animals:
 const Animal = {
@@ -16,17 +11,17 @@ const Animal = {
   type: "",
   age: 0,
 };
-window.addEventListener("DOMContentLoaded", start);
-//MODEL
 
 function start() {
   console.log("ready");
-  // TODO: Add event-listeners to filter and sort buttons
-  catButton.addEventListener("click", displayCatList);
-  dogButton.addEventListener("click", displayDogList);
-  allButton.addEventListener("click", displayList);
 
+  // TODO: Add event-listeners to filter and sort buttons
+  registerButtons();
   loadJSON();
+}
+
+function registerButtons() {
+  document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
 }
 
 async function loadJSON() {
@@ -37,19 +32,10 @@ async function loadJSON() {
   prepareObjects(jsonData);
 }
 
-//CONTROLLER
-
 function prepareObjects(jsonData) {
   allAnimals = jsonData.map(preapareObject);
 
   // TODO: This might not be the function we want to call first
-  filterOfCats = filterCat(allAnimals);
-  filterOfDogs = filterDog(allAnimals);
-  filterOfAll = filterAll(allAnimals);
-
-  displayList(filterOfDogs);
-  displayList(filterOfAll);
-  displayList(filterOfCats);
   displayList(allAnimals);
 }
 
@@ -65,70 +51,35 @@ function preapareObject(jsonObject) {
   return animal;
 }
 
-//is functions
+function selectFilter(event) {
+  const filter = event.target.dataset.filter;
+  filterList(filter);
+}
+
+function filterList(filterBy) {
+  let filteredList = allAnimals;
+  //creates a filtered list of cats
+  if (filterBy === "cat") {
+    filteredList = allAnimals.filter(isCat);
+  } else if (filterBy === "dog") {
+    filteredList = allAnimals.filter(isDog);
+  }
+  displayList(filteredList);
+}
+
 function isCat(animal) {
-  if (animal.type === "cat") {
-    return true;
-  }
-  return false;
+  return animal.type == "cat";
 }
-
 function isDog(animal) {
-  if (animal.type === "dog") {
-    return true;
-  }
-  return false;
-}
-function isAllAnimals(animal) {
-  return true;
-}
-//filter only if is function is true
-function checkAll(animal) {
-  if (isAllAnimals) {
-    filterAll(allAnimals);
-  }
-}
-function checkCat(animal) {
-  if (isCat) {
-    filterCat(allAnimals);
-  } else return;
+  return animal.type == "dog";
 }
 
-function checkDog(animal) {
-  if (isDog) {
-    filterDog(allAnimals);
-  } else return;
-}
-
-//filter
-
-function filterCat(allAnimals) {
-  return allAnimals.filter(isCat);
-}
-
-function filterDog(allAnimals) {
-  return allAnimals.filter(isDog);
-}
-function filterAll(allAnimals) {
-  return allAnimals.filter(isAllAnimals);
-}
-
-//VIEW
-
-function displayList() {
+function displayList(animals) {
   // clear the list
   document.querySelector("#list tbody").innerHTML = "";
+
   // build a new list
-  filterOfAll.forEach(displayAnimal);
-  //animals.forEach(displayAnimal);
-}
-function displayCatList() {
-  document.querySelector("#list tbody").innerHTML = "";
-  filterOfCats.forEach(displayAnimal);
-}
-function displayDogList() {
-  document.querySelector("#list tbody").innerHTML = "";
-  filterOfDogs.forEach(displayAnimal);
+  animals.forEach(displayAnimal);
 }
 
 function displayAnimal(animal) {
