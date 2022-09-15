@@ -21,6 +21,7 @@
     <table id="list">
       <thead>
         <tr id="sorting">
+          <th data-action="sort" data-sort-direction="asc" data-sort="winner">🏆</th>
           <th data-action="sort" data-sort-direction="asc" data-sort="star">☆</th>
           <th data-action="sort" data-sort-direction="asc" data-sort="name">Name</th>
           <th data-action="sort" data-sort-direction="asc" data-sort="type">Type</th>
@@ -35,6 +36,7 @@
 
     <template id="animal">
       <tr>
+        <td data-field="winner" data-winner="false">🏆</td>
         <td data-field="star">☆</td>
         <td data-field="name">NAME</td>
         <td data-field="type">TYPE</td>
@@ -42,6 +44,25 @@
         <td data-field="age">AGE</td>
       </tr>
     </template>
+
+    <div id="remove_aorb" class="dialog">
+      <div class="dialogcontent">
+        <button class="closebutton">close</button>
+        <h1>You can only have two winners!</h1>
+        <h2>Remove one, before you appoint more</h2>
+        <p><button class="remove_A">remove</button> <span class="animal1">NAME, the TYPE</span></p>
+        <p><button class="remove_B">remove</button> <span class="animal2">NAME, the TYPE</span></p>
+      </div>
+    </div>
+
+    <div id="remove_other" class="dialog">
+      <div class="dialogcontent">
+        <button class="closebutton">close</button>
+        <h1>You can only have one winner of each type</h1>
+        <h2>Remove the other if you want to appoint a new one</h2>
+        <p><button class="remove_other">remove</button> <span class="animal1">NAME, the TYPE</span></p>
+      </div>
+    </div>
 
     <script src="animalbase.js"></script>
   </body>
